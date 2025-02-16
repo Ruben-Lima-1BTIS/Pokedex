@@ -403,48 +403,50 @@ Pokemon pokedex[MAX_POKEMON] = {
 void saveProgress(Pokemon pokedex[], int size) {
   FILE *file = fopen("pokedex_progress.txt", "w");
   if (file == NULL) {
-    printf("Erro a abrir o ficheiro.\n");
+    printf("Could not open the file.\n");
     return;
   }
   for (int i = 0; i < size; i++) {
     fprintf(file, "%s %d\n", pokedex[i].name, pokedex[i].caught);
   }
   fclose(file);
-  printf("Progresso salvo com sucesso.\n");
+  printf("Progress saved successfully.\n");
 }
 
 void loadProgress(Pokemon pokedex[], int size) {
   FILE *file = fopen("pokedex_progress.txt", "r");
   if (file == NULL) {
-    printf("Nenhum progresso encontrado.\nVai apanhar pokemons seu virgem do caralho.\n");
+    printf("No progress found.\nGo catch some Pokemon you fucking virgin.\n");
     return;
   }
   for (int i = 0; i < size; i++) {
     fscanf(file, "%s %d", &pokedex[i].name, &pokedex[i].caught);
   }
   fclose(file);
-  printf("Progresso carregado com sucesso.\n");
+  printf("Progress loaded successfully.\n");
 }
 
 void displayPokedex(Pokemon pokedex[], int size) {
-  printf("\nO teu Pokedex:\n");
+  printf("\nYour Pokedex:\n");
   for (int i = 0; i < size; i++) {
     printf("#%d %s [%s/%s] - %s\n", pokedex[i].number, pokedex[i].name, pokedex[i].type1,
-      strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2, pokedex[i].caught ? "Apanhado" : "Por apanhar");
+           strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2,
+           pokedex[i].caught ? "Caught" : "Not Caught");
   }
 }
 
 void displayNotCaught(Pokemon pokedex[], int size) {
-  printf("\nPokemons nao apanhados:\n");
+  printf("\nPokemons not caught:\n");
   int found = 0;
   for (int i = 0; i < size; i++) {
     if (pokedex[i].caught == 0) {
-      printf("#%d %s [%s/%s]\n", pokedex[i].number, pokedex[i].name, pokedex[i].type1, strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2);
+      printf("#%d %s [%s/%s]\n", pokedex[i].number, pokedex[i].name, pokedex[i].type1,
+             strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2);
       found = 1;
     }
   }
   if (!found) {
-    printf("Completaste o Pokedex inteiro!\nEs mesmo um virgem sem vida.\nGo touch some grass or kys");
+    printf("You completed the entire Pokedex !\nYou are oficially a fucking virgin.\nGo touch some grass and kys");
   }
 }
 
@@ -452,25 +454,25 @@ void markCaught(Pokemon pokedex[], int size, int num) {
   for (int i = 0; i < size; i++) {
     if (pokedex[i].number == num) {
       pokedex[i].caught = 1;
-      printf("%s já foi apanhado!\n", pokedex[i].name);
+      printf("%s has been marked as caught!\n", pokedex[i].name);
       return;
     }
   }
-  printf("Pokemon nao encontrado.\n");
+  printf("Pokemon not found.\n");
 }
 
 void viewPokemon(Pokemon pokedex[], int size, int num) {
   for (int i = 0; i < size; i++) {
     if (pokedex[i].number == num) {
-      printf("\nDetalhes do Pokemon:\n");
-      printf("Numero: #%d\n", pokedex[i].number);
-      printf("Nome: %s\n", pokedex[i].name);
-      printf("Tipo: %s / %s\n", pokedex[i].type1, strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2);
-      printf("Estado: %s\n", pokedex[i].caught ? "Caught" : "Not Caught");
+      printf("\nPokemon Details:\n");
+      printf("Number: #%d\n", pokedex[i].number);
+      printf("Name: %s\n", pokedex[i].name);
+      printf("Type: %s / %s\n", pokedex[i].type1, strcmp(pokedex[i].type2, "-") == 0 ? "None" : pokedex[i].type2);
+      printf("Status: %s\n", pokedex[i].caught ? "Caught" : "Not Caught");
       return;
     }
   }
-  printf("Pokemon nao encontrado.\n");
+  printf("Pokemon not found.\n");
 }
 
 int main() {
@@ -479,38 +481,38 @@ int main() {
   int num;
 
   while (1) {
-    printf("\nMenu doPokedex:\n");
-    printf("1 - Ver Pokedex inteiro\n");
-    printf("2 - Marcar Pokemon como apanhado\n");
-    printf("3 - Ver detalhes sobre um Pokemon\n");
-    printf("4 - Ver Pokemons por apanhar\n");
-    printf("5 - Sair\n");
-    printf("Escolha uma opcao: ");
+    printf("\nPokedex:\n");
+    printf("1 - See entire Pokedex\n");
+    printf("2 - Mark Pokemon has caught\n");
+    printf("3 - See a Pokemon details\n");
+    printf("4 - Check uncaught Pokemon\n");
+    printf("5 - Exit\n");
+    printf("Choose an option: ");
     scanf("%d", &option);
 
     switch (option) {
       case 1:
         displayPokedex(pokedex, MAX_POKEMON);
-      break;
+        break;
       case 2:
-        printf("Introduza o numero do Pokemon para o marcar como apanhado: ");
-      scanf("%d", &num);
-      markCaught(pokedex, MAX_POKEMON, num);
-      break;
+        printf("Enter the Pokemon's number to mark as caught: ");
+        scanf("%d", &num);
+        markCaught(pokedex, MAX_POKEMON, num);
+        break;
       case 3:
-        printf("Introduza o numero do Pokemon para ver os seus detalhes: ");
-      scanf("%d", &num);
-      viewPokemon(pokedex, MAX_POKEMON, num);
-      break;
+        printf("Enter the Pokemon's number to view details: ");
+        scanf("%d", &num);
+        viewPokemon(pokedex, MAX_POKEMON, num);
+        break;
       case 4:
         displayNotCaught(pokedex, MAX_POKEMON);
-      break;
+        break;
       case 5:
-      saveProgress(pokedex, MAX_POKEMON);
-      printf("A sair do Pokedex.\n");
-      return 0;
+        saveProgress(pokedex, MAX_POKEMON);
+        printf("Thank you for using the Pokedex.\nGoodbye and remember...\nCatch them all");
+        return 0;
       default:
-        printf("Opcao inválida.\nTente novamente:");
+        printf("Invalid choice.\nTry again:");
     }
   }
 }
